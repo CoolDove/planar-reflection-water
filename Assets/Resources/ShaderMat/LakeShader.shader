@@ -4,7 +4,7 @@
     {
         _BaseColor("BaseColor", Color) = (.3,.6,.8,1)
         _BaseColorB("BaseColorB", Color) = (.2,.4,.6,1)
-        _Reflection("Reflection", float) = .6
+        _Reflection("Reflection", Range(0, 1)) = .6
         _ReflectionTex("ReflectionTex", 2D) = "white" {}
         _EdgePower("EdgePower", float) = 1
         _EdgeWidth("EdgeWidth", float) = 0

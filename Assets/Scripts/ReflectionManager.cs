@@ -5,7 +5,6 @@ using UnityEngine.Rendering;
 
 public class ReflectionManager : MonoBehaviour
 {
-    [SerializeField] Material lake_material;
     [SerializeField] Renderer lake_renderer;
 
     private void Start() {
@@ -19,6 +18,7 @@ public class ReflectionManager : MonoBehaviour
         reflection_camera.CopyFrom(main_camera);
 
         lake_renderer.sharedMaterial.SetTexture("_ReflectionTex", render_texture);
+        reflection_camera.targetTexture = render_texture;
     }
 
     private void AfterCameraRender(ScriptableRenderContext _render_context, Camera _camera) {
@@ -28,7 +28,6 @@ public class ReflectionManager : MonoBehaviour
     }
 
     private void RenderReflection() {
-        reflection_camera.targetTexture = render_texture;
 
         Vector3 camera_direction_world_space = main_camera.transform.forward;
         Vector3 camera_up_world_space = main_camera.transform.up;
@@ -55,39 +54,12 @@ public class ReflectionManager : MonoBehaviour
         Matrix4x4 cam_matrix = reflection_camera.worldToCameraMatrix.inverse.transpose;
         
         reflection_camera.projectionMatrix = reflection_camera.CalculateObliqueMatrix(cam_matrix * plane);
-        
-        // DrawQuad();
-    }
-    private void DrawQuad() {
-        GL.PushMatrix();
-
-        reflection_material.SetPass(0);
-        reflection_material.SetTexture("_ReflectionMap", render_texture);
-
-        GL.LoadOrtho();
-        GL.Begin(GL.QUADS);
-
-        GL.TexCoord2(1f, 0f);
-        GL.Vertex3(0f, 0f, 0f);
-
-        GL.TexCoord2(1f, 1f);
-        GL.Vertex3(0f, 1f, 0f);
-
-        GL.TexCoord2(0f, 1f);
-        GL.Vertex3(1f, 1f, 0f);
-
-        GL.TexCoord2(0f, 0f);
-        GL.Vertex3(1f, 0f, 0f);
-
-        GL.End();
-        
-        GL.PopMatrix();
     }
 
     RenderTexture render_texture;
 
-    [SerializeField] Material reflection_material;
-    Camera reflection_camera;
-    [SerializeField] Camera main_camera;
     [SerializeField] Transform reflection_plane;
+
+    private Camera reflection_camera;
+    private Camera main_camera;
 }
